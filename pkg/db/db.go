@@ -29,27 +29,27 @@ func Init(dbFile string) error {
 		if os.IsNotExist(err) {
 			install = true
 		} else {
-			return fmt.Errorf("failed to check database file: %w", err)
+			return fmt.Errorf("не удалось проверить файл базы данных: %w", err)
 		}
 	}
 
 	// Открываем базу данных
 	db, err := sql.Open("sqlite", dbFile)
 	if err != nil {
-		return fmt.Errorf("failed to open database: %w", err)
+		return fmt.Errorf("не удалось открыть базу данных: %w", err)
 	}
 
 	// Проверяем соединение
 	if err := db.Ping(); err != nil {
-		return fmt.Errorf("failed to connect to database: %w", err)
+		return fmt.Errorf("не удалось подключиться к базе данных: %w", err)
 	}
 
 	// Если файла не было, создаем схему
 	if install {
 		if _, err := db.Exec(schema); err != nil {
-			return fmt.Errorf("failed to create schema: %w", err)
+			return fmt.Errorf("не удалось создать схему: %w", err)
 		}
-		fmt.Printf("Database created successfully: %s\n", dbFile)
+		fmt.Printf("База данных успешно создана: %s\n", dbFile)
 	}
 
 	return nil

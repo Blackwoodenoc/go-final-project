@@ -1,21 +1,24 @@
 package server
 
 import (
-    "net/http"
-    "os"
+	"net/http"
+ 	"os"
+ 	"go1f/pkg/api"
 )
 
-func Run() error{
+
+func Run() error {
 	port := "7540"
 	if envPort := os.Getenv("TODO_PORT"); envPort != "" {
 		port = envPort
- 	}
+	}
 
- 	webDir := "web"
+	webDir := "web"
+	fileServer := http.FileServer(http.Dir(webDir))
 
-	err := http.ListenAndServe(":"+port, http.FileServer(http.Dir(webDir)))
- 	if err != nil {
-  		panic(err)
- 	}
-	return nil
+	api.Init() // регистрируем API
+
+	http.Handle("/", fileServer) // статика
+	
+	return http.ListenAndServe(":"+port, nil)
 }
