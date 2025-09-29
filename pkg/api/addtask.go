@@ -85,6 +85,11 @@ func writeJSONSuccess(w http.ResponseWriter, data map[string]interface{}) {
     json.NewEncoder(w).Encode(data)
 }
 
+func writeJson(w http.ResponseWriter, data interface{}) {
+    w.WriteHeader(http.StatusOK)
+    json.NewEncoder(w).Encode(data)
+}
+
 func writeJSONError(w http.ResponseWriter, error string, code int) {
     w.WriteHeader(code)
     json.NewEncoder(w).Encode(map[string]string{"error": error})

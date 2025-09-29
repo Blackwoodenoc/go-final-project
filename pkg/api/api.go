@@ -11,6 +11,7 @@ const MaxDayInterval = 400
 func Init() {
     http.HandleFunc("/api/nextdate", nextDayHandler)
     http.HandleFunc("/api/task", taskHandler)
+    http.HandleFunc("/api/tasks", tasksHandler)
 }
 
 func nextDayHandler(w http.ResponseWriter, r *http.Request) {

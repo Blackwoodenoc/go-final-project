@@ -21,7 +21,11 @@
 
 package db
 
-import "fmt"
+import (
+	"database/sql"
+	"fmt"
+)
+
 type Task struct {
     ID      string `json:"id"`
     Date    string `json:"date"`
@@ -43,4 +47,38 @@ func AddTask(task *Task) (int64, error) {
         id, err = res.LastInsertId()
     }
     return id, err
+}
+
+func Tasks(limit int) ([]*Task, error) {
+    if GetDB() == nil {
+        return nil, fmt.Errorf("database connection is not initialized")
+    }
+
+    rows, err := GetDB().Query("SELECT id, date, title, comment, repeat FROM scheduler ORDER BY date LIMIT :limit", sql.Named("limit", limit))
+    if err != nil {
+        return nil, fmt.Errorf("database query error: %w", err)
+    }
+    defer rows.Close()
+
+    var tasks []*Task
+
+    for rows.Next() {
+        var task Task
+        err := rows.Scan(&task.ID, &task.Date, &task.Title, &task.Comment, &task.Repeat)
+        if err != nil {
+            return nil, fmt.Errorf("scan error: %w", err)
+        }
+        tasks = append(tasks, &task)
+    }
+
+    if err := rows.Err(); err != nil {
+        return nil, fmt.Errorf("rows error: %w", err)
+    }
+
+    // Возвращаем пустой слайс вместо nil
+    if tasks == nil {
+        tasks = []*Task{}
+    }
+
+    return tasks, nil
 }
