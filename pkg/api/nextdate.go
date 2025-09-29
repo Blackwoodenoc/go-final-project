@@ -10,7 +10,7 @@ import (
 
 // Сравнение только по дате, игнорируем время
 func afterNow(date, now time.Time) bool {
-    return date.After(now)
+    return date.Format(DateFormat) > now.Format(DateFormat)
 }
 
 // NextDate вычисляет следующую дату задачи по правилу repeat
