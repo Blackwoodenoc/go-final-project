@@ -1,10 +1,11 @@
 module github.com/Blackwoodenoc/go-final-project
 
-go 1.24.6
+go 1.24
 
 replace go1f => ./
 
 require (
+	github.com/golang-jwt/jwt/v5 v5.3.0
 	github.com/jmoiron/sqlx v1.4.0
 	github.com/stretchr/testify v1.11.1
 	go1f v0.0.0
